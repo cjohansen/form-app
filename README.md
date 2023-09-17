@@ -1,10 +1,11 @@
 # An example of a stateless, data-driven frontend
 
 This repo contains my implementation of the code from Abhinav Omprakash's
-[interesting article about what makes frontend
-development
+[interesting article about what makes frontend development
 tricky](https://www.abhinavomprakash.com/posts/what-makes-frontend-development-tricky/).
-I also wrote a follow-up article detailing the thought process behind this code.
+I also wrote [a follow-up
+article](https://cjohansen.no/stateless-data-driven-uis/) detailing the thought
+process behind this code.
 
 This code can also be seen as a more detailed practical demonstration of my
 talk about [Stateless, data-driven UIs](https://vimeo.com/861600197).
