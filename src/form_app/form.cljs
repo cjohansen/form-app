@@ -12,22 +12,23 @@
     (when-not (valid-date-format? value)
       (str "Incorrect date format, please use " DATE_FORMAT))))
 
-(defn prepare-date-input [app-state k]
-  (let [{:keys [value state]} (k app-state)
-        message (when (= :validating state)
+(defn prepare-date-input [state k]
+  (let [{:keys [value validating?]} (k state)
+        message (when validating?
                   (validate-date value))]
     (cond-> {:placeholder DATE_FORMAT
              :value (or value "")
-             :input-actions (->> [[:action/save [k :value] :event/target.value]
-                                  (when (and state (or (empty? value) (not message)))
-                                    [:action/save [k :state] nil])]
-                                 (remove nil?))}
+             :input-actions
+             (->> [[:action/save [k :value] :event/target.value]
+                   (when (and validating? (or (empty? value) (not message)))
+                     [:action/save [k :validating?] false])]
+                  (remove nil?))}
       message
       (assoc :message message
              :error? (boolean message))
 
-      (and (nil? state) value)
-      (assoc :blur-actions [[:action/save [k :state] :validating]]))))
+      (and (not validating?) value)
+      (assoc :blur-actions [[:action/save [k :validating?] true]]))))
 
 (defn prepare-date-field [state]
   (prepare-date-input state :fields/date))

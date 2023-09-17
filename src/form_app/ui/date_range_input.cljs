@@ -8,9 +8,8 @@
     [:p {:class :pr-3} (:label from)]
     [:span {:class :pr-3}
      (DateInput from)]
-    [:p {:class :pr-3} (:label to)]
-    [:span {:class :pr-3}
-     (DateInput to)]]
+    [:p {:class [:px-3]} (:label to)]
+    (DateInput to)]
    (when message
      [:p {:class [:help (when error? :is-danger)]}
       message])])
