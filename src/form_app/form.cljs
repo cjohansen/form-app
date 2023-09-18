@@ -47,16 +47,21 @@
     (when (and (valid-date-format? from)
                (valid-date-format? to)
                (not (before? from to)))
-      "End date should be after start date")))
+      (if (= :from (get-in state [:fields/range :current]))
+        "Start date shoud be before end date"
+        "End date should be after start date"))))
 
 (defn prepare-date-range [state]
-  (let [message (validate-date-range state)]
-    {:from (-> (prepare-date-input state :fields/range-from)
-               (assoc :label "From"))
-     :to (-> (prepare-date-input state :fields/range-to)
-             (assoc :label "To"))
-     :message message
-     :error? (boolean message)}))
+  (let [message (validate-date-range state)
+        active (get-in state [:fields/range :current] :to)]
+    (cond-> {:from (-> (prepare-date-input state :fields/range-from)
+                       (assoc :label "From")
+                       (update :input-actions conj [:action/save [:fields/range :current] :from]))
+             :to (-> (prepare-date-input state :fields/range-to)
+                     (assoc :label "To")
+                     (update :input-actions conj [:action/save [:fields/range :current] :to]))}
+      message (assoc-in [active :message] message)
+      message (assoc-in [active :error?] true))))
 
 (defn prepare-button [state]
   (let [ready? (boolean
